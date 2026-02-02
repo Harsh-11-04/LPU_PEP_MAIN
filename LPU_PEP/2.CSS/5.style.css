@@ -1,0 +1,50 @@
+/* 1. Name color: css 140 predefined */
+h1{
+    color: whitesmoke;
+    background-color: blue;
+}
+
+/* 2. Hexadecimal colors: RR,GG,BB , shorthand #RGB */
+h2{
+    color: #ff0000;
+}
+p{
+    color: rgb(0,299,255)
+}
+
+/* 3. RGB color */
+h3{
+    color: rgb(255,0,191)
+}
+
+/* 4. RGBA color, A is transparency */
+h4{
+    background-color: rgba(255,0,0,0.3);
+}
+
+/* Background properties: */
+
+.box{
+    height: 300px;
+    padding: 20px;
+    margin: 20px;
+    border: 10px solid black;
+    color: white;
+    font-size: 24px;
+
+    background-color: #3498db; /* set color */
+    background-image: url("./2.CSS/img/img.jfif");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    background-attachment: fixed;
+    background-origin: padding-box;
+    background-clip: border-box;
+}
+
+.short{
+    height: 300px;
+    margin: 30px;
+    border: 5px solid red;
+    background: #2ecc71 url("./2.CSS/img/img.jfif" )no-repeat center;
+}
