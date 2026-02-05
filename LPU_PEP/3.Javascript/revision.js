@@ -1,85 +1,5 @@
-// ==========================================
-// PART A: CLOSURE (Practical Questions)
-// ==========================================
-console.log("%c PART A: CLOSURE ", "background: #222; color: #bada55; font-size: 16px;");
-
-// 1. Create a counter using closure with methods: increment(), decrement(), reset().
-function createCounter() {
-    let count = 0;
-    return {
-        increment: () => { count++; console.log(`Counter: ${count}`); return count; },
-        decrement: () => { count--; console.log(`Counter: ${count}`); return count; },
-        reset: () => { count = 0; console.log(`Counter: ${count}`); return count; }
-    };
-}
-// Test Code
-/*
-const myCounter = createCounter();
-myCounter.increment(); // 1
-myCounter.increment(); // 2
-myCounter.decrement(); // 1
-myCounter.reset();     // 0
-*/
-
-// 2. Create a private bank account using closure with methods: deposit(amount), withdraw(amount), getBalance().
-function createBankAccount(initialBalance = 0) {
-    let balance = initialBalance;
-    return {
-        deposit: (amount) => {
-            if (amount > 0) {
-                balance += amount;
-                console.log(`Deposited: ${amount}. New Balance: ${balance}`);
-            }
-        },
-        withdraw: (amount) => {
-            if (amount > 0 && amount <= balance) {
-                balance -= amount;
-                console.log(`Withdrew: ${amount}. New Balance: ${balance}`);
-            } else {
-                console.log("Insufficient funds or invalid amount.");
-            }
-        },
-        getBalance: () => {
-            console.log(`Current Balance: ${balance}`);
-            return balance;
-        }
-    };
-}
-
-// 3. Create a function once(fn) that allows a function to run only one time.
-function once(fn) {
-    let called = false;
-    let result;
-    return function (...args) {
-        if (!called) {
-            called = true;
-            result = fn.apply(this, args);
-            return result;
-        }
-        return undefined; // or return last result
-    };
-}
-
-// 4. Create a multiplier factory function multiplyBy(x) that returns functions like double(5), triple(5).
-function multiplyBy(factor) {
-    return function (number) {
-        return number * factor;
-    };
-}
-// Usage: const double = multiplyBy(2); console.log(double(5)); // 10
-
-// 5. Create a secure password checker using closure.
-function createPassword(correctPassword) {
-    return function (inputPassword) {
-        return inputPassword === correctPassword;
-    };
-}
-
-// ==========================================
-// PART B: EVENTS & EVENT LISTENERS (Practical DOM Tasks)
-// ==========================================
-// Helper to render sections
 const container = document.getElementById('dom-tasks');
+
 function createSection(title, contentFn) {
     const section = document.createElement('section');
     section.innerHTML = `<h2>${title}</h2>`;
@@ -89,156 +9,163 @@ function createSection(title, contentFn) {
     container.appendChild(section);
 }
 
-// 6. Create a button click counter.
-createSection("6. Click Counter", (parent) => {
-    const btn = document.createElement('button');
-    btn.textContent = "Click Me: 0";
+/* ================= PART A ================= */
+
+createSection("1. Closure Counter", parent => {
     let count = 0;
+    const inc = document.createElement("button");
+    const dec = document.createElement("button");
+    const reset = document.createElement("button");
+    const display = document.createElement("div");
+
+    inc.textContent = "Increment";
+    dec.textContent = "Decrement";
+    reset.textContent = "Reset";
+
+    inc.onclick = () => display.textContent = ++count;
+    dec.onclick = () => display.textContent = --count;
+    reset.onclick = () => display.textContent = count = 0;
+
+    parent.append(inc, dec, reset, display);
+});
+
+createSection("2. Bank Account", parent => {
+    let balance = 0;
+    const d = document.createElement("button");
+    const w = document.createElement("button");
+    const out = document.createElement("div");
+
+    d.textContent = "Deposit 100";
+    w.textContent = "Withdraw 50";
+
+    d.onclick = () => out.textContent = balance += 100;
+    w.onclick = () => out.textContent = balance -= 50;
+
+    parent.append(d, w, out);
+});
+
+createSection("3. Once Function", parent => {
+    let used = false;
+    const btn = document.createElement("button");
+    btn.textContent = "Click Once";
     btn.onclick = () => {
-        count++;
-        btn.textContent = `Click Me: ${count}`;
+        if (!used) {
+            alert("Executed!");
+            used = true;
+        }
     };
     parent.appendChild(btn);
 });
 
-// 7. Toggle Light/Dark Mode
-createSection("7. Light/Dark Mode", (parent) => {
+createSection("4. Multiplier", parent => {
+    const btn = document.createElement("button");
+    const out = document.createElement("div");
+    btn.textContent = "Double 5";
+    btn.onclick = () => out.textContent = 5 * 2;
+    parent.append(btn, out);
+});
+
+createSection("5. Password Check", parent => {
+    const input = document.createElement("input");
+    input.placeholder = "password = 123";
+    const btn = document.createElement("button");
+    const out = document.createElement("div");
+
+    btn.textContent = "Check";
+    btn.onclick = () => out.textContent = input.value === "123";
+
+    parent.append(input, btn, out);
+});
+
+/* ================= PART B (6–12 same) ================= */
+
+createSection("6. Click Counter", parent => {
     const btn = document.createElement('button');
-    btn.textContent = "Toggle Dark Mode";
+    let c = 0;
+    btn.textContent = "Click 0";
+    btn.onclick = () => btn.textContent = ++c;
+    parent.appendChild(btn);
+});
+
+createSection("7. Dark Mode", parent => {
+    const btn = document.createElement("button");
+    btn.textContent = "Toggle";
+    btn.onclick = () => document.body.classList.toggle("dark-mode");
+    parent.appendChild(btn);
+});
+
+createSection("8. Validation", parent => {
+    const i = document.createElement("input");
+    const b = document.createElement("button");
+    const o = document.createElement("div");
+    i.placeholder = "min 6 chars";
+    b.textContent = "Check";
+    b.onclick = () => o.textContent = i.value.length >= 6 ? "OK" : "Too short";
+    parent.append(i, b, o);
+});
+
+createSection("9. One Time Button", parent => {
+    let once = true;
+    const btn = document.createElement("button");
+    btn.textContent = "Click";
     btn.onclick = () => {
-        document.body.classList.toggle('dark-mode');
+        if (once) alert("Done");
+        once = false;
     };
     parent.appendChild(btn);
 });
 
-// 8. Form Validation
-createSection("8. Form Validation", (parent) => {
-    const form = document.createElement('form');
-    form.innerHTML = `
-        <input type="text" id="v-name" placeholder="Name" style="display:block; margin:5px 0;">
-        <input type="text" id="v-email" placeholder="Email" style="display:block; margin:5px 0;">
-        <input type="password" id="v-pass" placeholder="Password" style="display:block; margin:5px 0;">
-        <button type="submit">Submit</button>
-        <div id="v-msg" class="error"></div>
-    `;
-    form.onsubmit = (e) => {
-        e.preventDefault();
-        const name = document.getElementById('v-name').value;
-        const email = document.getElementById('v-email').value;
-        const pass = document.getElementById('v-pass').value;
-        const msg = document.getElementById('v-msg');
-
-        if (!name.trim()) return msg.textContent = "Name cannot be empty";
-        if (!email.includes('@')) return msg.textContent = "Email must contain @";
-        if (pass.length < 6) return msg.textContent = "Password must be at least 6 chars";
-
-        msg.textContent = "Success!";
-        msg.style.color = "green";
-    };
-    parent.appendChild(form);
+createSection("10. Show Password", parent => {
+    const i = document.createElement("input");
+    i.type = "password";
+    const c = document.createElement("input");
+    c.type = "checkbox";
+    c.onchange = () => i.type = c.checked ? "text" : "password";
+    parent.append(i, c);
 });
 
-// 9. Button works only once
-createSection("9. One-time Button", (parent) => {
-    const btn = document.createElement('button');
-    btn.textContent = "Click Only Once";
-    const runOnce = once(() => alert("Button clicked!"));
-    btn.onclick = runOnce;
-    parent.appendChild(btn);
-});
-
-// 10. Show/Hide Password
-createSection("10. Show/Hide Password", (parent) => {
-    const input = document.createElement('input');
-    input.type = "password";
-    input.placeholder = "Type password...";
-
-    const checkLabel = document.createElement('label');
-    checkLabel.innerHTML = ` <input type="checkbox"> Show Password`;
-
-    checkLabel.querySelector('input').onchange = (e) => {
-        input.type = e.target.checked ? "text" : "password";
-    };
-
-    parent.appendChild(input);
-    parent.appendChild(checkLabel);
-});
-
-// 11. Event Delegation List
-createSection("11. Event Delegation", (parent) => {
-    const ul = document.createElement('ul');
-    ul.id = "list-container";
-    ['Item 1', 'Item 2', 'Item 3'].forEach(text => {
-        const li = document.createElement('li');
-        li.textContent = text;
+createSection("11. Delegation", parent => {
+    const ul = document.createElement("ul");
+    ["A","B","C"].forEach(x=>{
+        const li=document.createElement("li");
+        li.textContent=x;
         ul.appendChild(li);
     });
-
-    ul.addEventListener('click', (e) => {
-        if (e.target.tagName === 'LI') {
-            alert(`You clicked: ${e.target.textContent}`);
-        }
-    });
+    ul.onclick=e=>alert(e.target.textContent);
     parent.appendChild(ul);
 });
 
-// 12. Textarea Character Count
-createSection("12. Character Count", (parent) => {
-    const tarea = document.createElement('textarea');
-    const display = document.createElement('div');
-    display.textContent = "Count: 0";
-
-    tarea.oninput = () => {
-        display.textContent = `Count: ${tarea.value.length}`;
-    };
-
-    parent.appendChild(tarea);
-    parent.appendChild(display);
+createSection("12. Char Count", parent => {
+    const t = document.createElement("textarea");
+    const d = document.createElement("div");
+    t.oninput=()=>d.textContent=t.value.length;
+    parent.append(t,d);
 });
 
+/* ================= PART C ================= */
 
-// ==========================================
-// PART C: ARRAY METHODS (Practical Coding Questions)
-// ==========================================
-console.log("%c PART C: ARRAY METHODS ", "background: #222; color: #bada55; font-size: 16px;");
+createSection("13. Map Double", p=>p.textContent=[1,2,3,4].map(x=>x*2));
 
-// 13. Map: Convert [1,2,3,4] into [2,4,6,8]
-const arr13 = [1, 2, 3, 4];
-console.log("13. Map Double:", arr13.map(x => x * 2));
+createSection("14. Filter Marks", p=>p.textContent=
+JSON.stringify([{a:40},{a:80}].filter(x=>x.a>50)));
 
-// 14. Filter: Students with marks > 50
-const students = [{ name: 'A', marks: 40 }, { name: 'B', marks: 80 }];
-console.log("14. Filter Marks > 50:", students.filter(s => s.marks > 50));
+createSection("15. Reduce Salary", p=>p.textContent=
+[{s:1000},{s:2000}].reduce((a,c)=>a+c.s,0));
 
-// 15. Reduce: Total salary
-const salaries = [{ salary: 1000 }, { salary: 2000 }];
-console.log("15. Reduce Total Salary:", salaries.reduce((acc, curr) => acc + curr.salary, 0));
+createSection("16. Uppercase", p=>p.textContent=
+["ram","sam"].map(x=>x.toUpperCase()));
 
-// 16. Map: Convert ['ram','sam','tom'] to uppercase
-const names = ['ram', 'sam', 'tom'];
-console.log("16. Map Uppercase:", names.map(n => n.toUpperCase()));
+createSection("17. Count", p=>{
+const r=['a','b','a'].reduce((a,c)=>(a[c]=(a[c]||0)+1,a),{});
+p.textContent=JSON.stringify(r);
+});
 
-// 17. Count occurrences: ['a','b','a','c','b','a']
-const chars = ['a', 'b', 'a', 'c', 'b', 'a'];
-const counts = chars.reduce((acc, char) => {
-    acc[char] = (acc[char] || 0) + 1;
-    return acc;
-}, {});
-console.log("17. Count Occurrences:", counts);
+createSection("18. Remove Duplicates", p=>p.textContent=[...new Set([1,2,2,3])]);
 
-// 18. Remove duplicates: [1,2,2,3,3,4]
-const dupNums = [1, 2, 2, 3, 3, 4];
-// Method 1: Set
-console.log("18. Remove Duplicates (Set):", [...new Set(dupNums)]);
-// Method 2: Filter
-console.log("18. Remove Duplicates (Filter):", dupNums.filter((item, index) => dupNums.indexOf(item) === index));
+createSection("19. Highest Salary", p=>{
+const r=[{s:2},{s:5}].reduce((a,c)=>a.s>c.s?a:c);
+p.textContent=JSON.stringify(r);
+});
 
-// 19. Find highest salary person
-const people = [{ name: 'A', salary: 2000 }, { name: 'B', salary: 5000 }];
-const richest = people.reduce((prev, current) => (prev.salary > current.salary) ? prev : current);
-console.log("19. Highest Salary:", richest);
-
-// 20. Filter even numbers and multiply by 10
-const nums20 = [1, 2, 3, 4, 5, 6];
-const result20 = nums20.filter(n => n % 2 === 0).map(n => n * 10);
-console.log("20. Filter Even & Multiply 10:", result20);
+createSection("20. Even ×10", p=>p.textContent=
+[1,2,3,4,5,6].filter(x=>x%2==0).map(x=>x*10));
