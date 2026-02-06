@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cat Image Fetcher</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 20px;
+            padding: 20px;
+            background-color: #fce4ec;
+            /* Light pink background */
+            text-align: center;
+        }
+
+        h1 {
+            color: #880e4f;
+        }
+
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        button {
+            padding: 12px 20px;
+            margin: 10px;
+            border: none;
+            background-color: #ec407a;
+            color: white;
+            cursor: pointer;
+            border-radius: 25px;
+            font-size: 16px;
+            font-weight: bold;
+            transition: transform 0.2s, background-color 0.2s;
+        }
+
+        button:hover {
+            background-color: #d81b60;
+            transform: scale(1.05);
+        }
+
+        #image-container {
+            margin-top: 30px;
+            min-height: 300px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        img {
+            max-width: 100%;
+            max-height: 400px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            display: none;
+            /* Hidden by default */
+        }
+
+        .loading {
+            font-style: italic;
+            color: #666;
+        }
+
+        .error {
+            color: #d32f2f;
+            background: #ffcdd2;
+            padding: 10px;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <h1>Random Cat Fetcher 🐱</h1>
+        <p>Click a button to get a random cat image!</p>
+
+        <button onclick="fetchCatPromise()">Get Cat (Promises)</button>
+        <button onclick="fetchCatAsync()">Get Cat (Async/Await)</button>
+
+        <div id="image-container">
+            <span class="loading">No cat yet...</span>
+            <img id="cat-img" src="" alt="Random Cat">
+        </div>
+        <div id="error-msg"></div>
+    </div>
+
+    <script>
+        const API_URL = 'https://api.thecatapi.com/v1/images/search';
+        const imgElement = document.getElementById('cat-img');
+        const container = document.getElementById('image-container');
+        const errorDiv = document.getElementById('error-msg');
+        const loadingSpan = document.querySelector('.loading');
+
+        function showLoading() {
+            imgElement.style.display = 'none';
+            loadingSpan.style.display = 'block';
+            loadingSpan.textContent = "Fetching a kitty...";
+            errorDiv.textContent = '';
+        }
+
+        function displayCat(url) {
+            imgElement.src = url;
+            imgElement.onload = () => {
+                loadingSpan.style.display = 'none';
+                imgElement.style.display = 'block';
+            };
+        }
+
+        function showError(message) {
+            loadingSpan.style.display = 'none';
+            errorDiv.textContent = message;
+            errorDiv.className = 'error';
+        }
+
+        // --- Method 1: Using Promises ---
+        function fetchCatPromise() {
+            showLoading();
+
+            fetch(API_URL)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP Error: ${response.status}`);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    // API returns an array: [{ "url": "..." }]
+                    if (data && data.length > 0) {
+                        displayCat(data[0].url);
+                    } else {
+                        throw new Error("No cat found :(");
+                    }
+                })
+                .catch(error => {
+                    showError(`Promise Error: ${error.message}`);
+                });
+        }
+
+        // --- Method 2: Using Async / Await ---
+        async function fetchCatAsync() {
+            showLoading();
+
+            try {
+                const response = await fetch(API_URL);
+
+                if (!response.ok) {
+                    throw new Error(`HTTP Error: ${response.status}`);
+                }
+
+                const data = await response.json();
+
+                if (data && data.length > 0) {
+                    displayCat(data[0].url);
+                } else {
+                    throw new Error("No cat found :(");
+                }
+            } catch (error) {
+                showError(`Async Error: ${error.message}`);
+            }
+        }
+    </script>
+</body>
+
+</html>
