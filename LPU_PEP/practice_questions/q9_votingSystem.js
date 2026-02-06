@@ -1,7 +1,3 @@
-/**
- * Part A: Closure (Q9)
- * 9. Create a voting system using closure that tracks yes and no votes.
- */
 
 function createVotingSystem() {
     let votes = { yes: 0, no: 0 };

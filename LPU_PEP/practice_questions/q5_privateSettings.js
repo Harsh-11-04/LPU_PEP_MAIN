@@ -1,7 +1,3 @@
-/**
- * Part A: Closure (Q5)
- * 5. Create a private settings object using closure with methods to read and update values.
- */
 
 function createSettings() {
     let settings = {

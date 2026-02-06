@@ -1,11 +1,4 @@
-/**
- * Part B: Events (Q16)
- * 16. Create a simple image switcher using click events.
- * 
- * Expected HTML:
- * <img id="myImage" src="image1.jpg" alt="Image">
- * <button id="switchBtn">Switch Image</button>
- */
+
 
 document.addEventListener("DOMContentLoaded", () => {
     const img = document.getElementById("myImage");

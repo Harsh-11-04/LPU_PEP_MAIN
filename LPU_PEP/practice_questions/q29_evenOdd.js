@@ -1,7 +1,4 @@
-/**
- * Part C: Array Methods (Q29)
- * 29. Separate even and odd numbers from [1,2,3,4,5,6].
- */
+
 
 const nums = [1, 2, 3, 4, 5, 6];
 

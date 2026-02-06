@@ -1,7 +1,4 @@
-/**
- * Part C: Array Methods (Q30)
- * 30. From an array of users, return names of users who are active.
- */
+
 
 const users = [
     { name: "Sita", active: true },

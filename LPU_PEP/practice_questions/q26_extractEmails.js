@@ -1,7 +1,3 @@
-/**
- * Part C: Array Methods (Q26)
- * 26. Extract email addresses from an array of user objects.
- */
 
 const users = [
     { name: "Alice", email: "alice@example.com" },

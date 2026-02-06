@@ -1,7 +1,4 @@
-/**
- * Part A: Closure (Q4)
- * 4. Create a function createUser(role) that returns a function to check role-based access.
- */
+
 
 function createUser(role) {
     return function () {

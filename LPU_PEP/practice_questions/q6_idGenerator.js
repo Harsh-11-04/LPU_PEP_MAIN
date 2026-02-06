@@ -1,7 +1,3 @@
-/**
- * Part A: Closure (Q6)
- * 6. Create a simple incremental ID generator using closure.
- */
 
 function createIdGenerator() {
     let id = 0;

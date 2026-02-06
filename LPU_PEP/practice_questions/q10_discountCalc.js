@@ -1,7 +1,4 @@
-/**
- * Part A: Closure (Q10)
- * 10. Create a discount calculator using closure that applies a fixed discount percentage.
- */
+
 
 function createDiscountCalculator(discountContext) {
     return function (price) {

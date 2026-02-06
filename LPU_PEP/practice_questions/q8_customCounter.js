@@ -1,7 +1,3 @@
-/**
- * Part A: Closure (Q8)
- * 8. Create a counter using closure that increments by a custom step value.
- */
 
 function createStepCounter(step) {
     let count = 0;
