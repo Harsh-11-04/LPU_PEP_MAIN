@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Fast Weather App</title>
+
+<style>
+body {
+  font-family: Arial;
+  background: #111;
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.box {
+  background: #1e1e1e;
+  padding: 25px;
+  border-radius: 10px;
+  text-align: center;
+  width: 300px;
+}
+
+input {
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 10px;
+}
+
+button {
+  width: 100%;
+  padding: 8px;
+  cursor: pointer;
+}
+
+#result {
+  margin-top: 15px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="box">
+  <h2>Weather App</h2>
+
+  <input id="city" placeholder="Enter city">
+  <button onclick="getWeather()">Get Weather</button>
+
+  <div id="result"></div>
+</div>
+
+<script>
+async function getWeather() {
+
+  const city = document.getElementById("city").value;
+  const result = document.getElementById("result");
+
+  if (!city) return alert("Enter city name");
+
+  result.innerHTML = "Loading...";
+
+  try {
+
+    // Convert city to latitude & longitude
+    const geo = await fetch(`https://geocoding-api.open-meteo.com/v1/search?name=${city}`);
+    const geoData = await geo.json();
+
+    if (!geoData.results) {
+      result.innerHTML = "City not found";
+      return;
+    }
+
+    const { latitude, longitude } = geoData.results[0];
+
+    // Get weather
+    const weather = await fetch(
+      `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current_weather=true`
+    );
+
+    const data = await weather.json();
+
+    result.innerHTML = `
+      <h3>${city}</h3>
+      <p>🌡️ ${data.current_weather.temperature} °C</p>
+      <p>💨 ${data.current_weather.windspeed} km/h</p>
+    `;
+
+  } catch (err) {
+    result.innerHTML = "Error loading weather";
+  }
+}
+</script>
+
+</body>
+</html>
